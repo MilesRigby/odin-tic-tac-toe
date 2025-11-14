@@ -20,17 +20,18 @@ var events = {
     },
     emit: function (eventName, data) {
         if (this.events[eventName]) {
+            console.log(eventName);
             this.events[eventName].forEach(function(fn) {
                 fn(data);
             })
         }
     }
-}
+};
 
 
 
 // Defines the 3*3 gameboard as well as functions for manipulating and modifying the board
-const gameBoard = (function GameBoard() {
+const gameBoard = (function() {
 
     let state = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
 
@@ -48,9 +49,9 @@ const gameBoard = (function GameBoard() {
             state[position[0]][position[1]] = player; 
             events.emit("board_state_update", state);
 
-            if (_playerWon())   { events.emit("player_won", player); }
+            if      (_playerWon())   { events.emit("player_won", player); }
             else if (_isStalemate()) { events.emit("stalemate"); }
-            else                { events.emit("player_turn_end"); }
+            else                     { events.emit("player_turn_end"); }
         }
     })
 
@@ -92,10 +93,7 @@ const gameBoard = (function GameBoard() {
         }
         return true;
     }
-
-    return state;
-
-})()
+})();
 
 
 
@@ -103,7 +101,7 @@ const gameBoard = (function GameBoard() {
 const turnHandler = (function() {
 
     // Tracks whose turn it currently is - 1: noughts, 2: crosses
-    let playerTurn = 1;
+    let playerTurn;
 
     // Event to be emitted by html elements when clicked, triggering the player_move event with the player who's turn it currently is
     events.on("gridspace_clicked", function(position) {
@@ -116,15 +114,14 @@ const turnHandler = (function() {
         events.emit("player_turn_update", playerTurn);
     })
 
-})()
+    // Noughts go first
+    events.on("start_game", function() {
+        playerTurn = 1;
+    });
+
+})();
 
 
-
-console.log(gameBoard);
-
-events.on("board_state_update", function() {
-    console.log(gameBoard);
-})
 
 events.on("stalemate", function() {
     console.log("Draw!");
@@ -133,3 +130,35 @@ events.on("stalemate", function() {
 events.on("player_won", function(player) {
     console.log("Player " + player.toString() + " wins!");
 })
+
+
+
+// Below are UI components
+
+// Manages the 3*3 display in index.html, diplsaying the current state of the board
+const boardHandler = (function() {
+
+    const uiBoard = document.querySelectorAll(".board-token");
+
+    uiBoard.forEach((token, index) => {
+        token.addEventListener("click", () => {
+            events.emit("gridspace_clicked", [index % 3, Math.floor(index/3.0)]);
+        });
+    });
+
+    events.on("board_state_update", function(state) {
+        for(x=0; x<3; x++) {
+            for(y=0; y<3; y++) {
+                token = x + 3*y;
+                if      (state[x][y] == 1) { uiBoard[token].innerText = "O"; }
+                else if (state[x][y] == 2) { uiBoard[token].innerText = "X"; }  
+                else                       { uiBoard[token].innerText = ""; }  
+            }
+        }
+    });
+
+})();
+
+
+
+events.emit("start_game")
