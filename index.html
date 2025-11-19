@@ -26,6 +26,21 @@
 
         <div class="victory-modal">Player X Won!</div>
 
+        <div class="options">
+            <form id="p1-form" class="name-form">
+                <label for="p1Name">Player 1 (O) Name: </label>
+                <input type="text" class="player-name-input" id="p1Name" name="p1Name">
+                <input type="submit" hidden /> <!-- allows submit with enter key after typing in a name -->
+            </form>
+            <form id="p2-form" class="name-form">
+                <label for="p2Name">Player 2 (X) Name: </label>
+                <input type="text" class="player-name-input" id="p2Name" name="p2Name">
+                <input type="submit" hidden />
+            </form>
+
+            <button class="restart-button">Restart Game</button>
+        </div>
+
     </page>
 
     <script src="script.js"></script>

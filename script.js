@@ -121,6 +121,7 @@ const turnHandler = (function() {
     // Noughts go first
     events.on("start_game", function() {
         playerTurn = 1;
+        events.emit("player_turn_update", playerTurn);
     });
 
     // On game end, prevent players from going
@@ -188,9 +189,16 @@ const boardHandler = (function() {
 const turnDispHandler = (function() {
 
     let turnDisplay = document.querySelector(".player-turn");
+    let whoseName = 1;
 
     events.on("player_turn_update", function(player) {
         turnDisplay.innerText = playerNameTracker.getPlayerName(player) + "'s Turn";
+        whoseName = player;
+    });
+
+    events.on("player_name_change", function({player, newName}) {
+        console.log("E")
+        if (whoseName == player) { console.log("A"); turnDisplay.innerText = newName + "'s Turn"; }
     });
 
 })();
@@ -212,20 +220,57 @@ const victoryModalHandler = (function() {
         victoryModal.style = "visibility: visible";
     });
 
+    events.on("start_game", function() {
+        victoryModal.style = "visibility: hidden";
+    });
+
+})();
+
+
+
+// Game restart button
+const restartButtonManager = (function() {
+
+    const restartButton = document.querySelector(".restart-button");
+
+    restartButton.addEventListener("click", () => {
+        events.emit("start_game");
+    });
+
+})();
+
+
+
+// Handles changing names of players through forms
+const nameFormHandler = (function() {
+
+    const p1NameForm = document.querySelector("#p1-form");
+    const p2NameForm = document.querySelector("#p2-form");
+
+    p1NameForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+    
+        const formData = new FormData(p1NameForm);
+        const newName = formData.get('p1Name');
+        events.emit("player_name_change", {player: 1, newName: newName})
+
+        p1NameForm.reset();
+    });
+
+    p2NameForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+    
+        const formData = new FormData(p2NameForm);
+        const newName = formData.get('p2Name');
+        events.emit("player_name_change", {player: 2, newName: newName})
+
+        p2NameForm.reset();
+    });
+
 })();
 
 
 
 // Game initiation/testing below
-
-events.emit("player_name_change", {player: 2, newName: "John"})
-
-events.on("stalemate", function() {
-    console.log("Draw!");
-})
-
-events.on("player_won", function(player) {
-    console.log("Player " + player.toString() + " wins!");
-})
 
 events.emit("start_game")
