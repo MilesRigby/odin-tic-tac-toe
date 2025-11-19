@@ -134,6 +134,33 @@ const turnHandler = (function() {
 
 // Below are UI components
 
+// Tracks player names
+const playerNameTracker = (function() {
+
+    const playerNames = {
+        1: "Player O",
+        2: "Player X",
+    };
+
+    console.log(playerNames);
+
+    events.on("player_name_change", function({player, newName}) {
+        playerNames[player] = newName;
+        console.log(playerNames);
+    });
+
+    function getPlayerName(player) {
+        return playerNames[player];
+    }
+
+    return {
+        getPlayerName: getPlayerName,
+    };
+
+})();
+
+
+
 // Manages the 3*3 display in index.html, diplsaying the current state of the board
 const boardHandler = (function() {
 
@@ -166,8 +193,7 @@ const turnDispHandler = (function() {
     let turnDisplay = document.querySelector(".player-turn");
 
     events.on("player_turn_update", function(player) {
-        if      (player == 1) { turnDisplay.innerText = "Player O's Turn"; }
-        else if (player == 2) { turnDisplay.innerText = "Player X's Turn"; }
+        turnDisplay.innerText = playerNameTracker.getPlayerName(player) + "'s Turn";
     });
 
 })();
@@ -180,15 +206,17 @@ const victoryModalHandler = (function() {
     const victoryModal = document.querySelector(".victory-modal");
 
     events.on("player_won", function(player) {
-        if      (player == 1) { victoryModal.textContent = "Player O Won!"; }
-        else if (player == 2) { victoryModal.textContent = "Player X Won!"; }
-
+        victoryModal.textContent = playerNameTracker.getPlayerName(player) + " Won!";
         victoryModal.style = "visibility: visible";
     });
 
 })();
 
 
+
+// Game initiation/testing below
+
+events.emit("player_name_change", {player: 2, newName: "John"})
 
 events.on("stalemate", function() {
     console.log("Draw!");
