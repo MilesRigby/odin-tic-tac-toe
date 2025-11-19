@@ -100,12 +100,14 @@ const gameBoard = (function() {
 // Keeps track of the current player turn, and handles events dependant on or affecting the current turn
 const turnHandler = (function() {
 
-    // Tracks whose turn it currently is - 1: noughts, 2: crosses
+    // Tracks whose turn it currently is - 1: noughts, 2: crosses; 0: game end
     let playerTurn;
 
     // Event to be emitted by html elements when clicked, triggering the player_move event with the player who's turn it currently is
     events.on("gridspace_clicked", function(position) {
-        events.emit("player_move", {player: playerTurn, position})
+        if (playerTurn){
+            events.emit("player_move", {player: playerTurn, position})
+        }
     })
 
     // When a player's turn ends, updates the current player turn and emits the new active turn
@@ -118,6 +120,11 @@ const turnHandler = (function() {
     events.on("start_game", function() {
         playerTurn = 1;
     });
+
+    // On game end, prevent players from going
+    events.on("player_won", function() {
+        playerTurn = 0;
+    })
 
 })();
 
