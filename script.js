@@ -1,3 +1,5 @@
+// players - 1: noughts; 2: crosses; 0: game ended
+
 // Events:
 // start_game
 // player_move
@@ -130,16 +132,6 @@ const turnHandler = (function() {
 
 
 
-events.on("stalemate", function() {
-    console.log("Draw!");
-})
-
-events.on("player_won", function(player) {
-    console.log("Player " + player.toString() + " wins!");
-})
-
-
-
 // Below are UI components
 
 // Manages the 3*3 display in index.html, diplsaying the current state of the board
@@ -167,5 +159,31 @@ const boardHandler = (function() {
 })();
 
 
+
+// Handler for the player turn display
+const turnDispHandler = (function() {
+
+    let turnDisplay = document.querySelector(".player-turn");
+
+    events.on("player_turn_update", function(player) {
+        if      (player == 1) { turnDisplay.innerText = "Player O's Turn"; }
+        else if (player == 2) { turnDisplay.innerText = "Player X's Turn"; }
+    });
+
+})();
+
+
+
+
+
+
+
+events.on("stalemate", function() {
+    console.log("Draw!");
+})
+
+events.on("player_won", function(player) {
+    console.log("Player " + player.toString() + " wins!");
+})
 
 events.emit("start_game")
