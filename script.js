@@ -197,8 +197,7 @@ const turnDispHandler = (function() {
     });
 
     events.on("player_name_change", function({player, newName}) {
-        console.log("E")
-        if (whoseName == player) { console.log("A"); turnDisplay.innerText = newName + "'s Turn"; }
+        if (whoseName == player) { turnDisplay.innerText = newName + "'s Turn"; }
     });
 
 })();
@@ -271,6 +270,5 @@ const nameFormManager = (function() {
 
 
 
-// Game initiation/testing below
-
+// Game initiation
 events.emit("start_game")
