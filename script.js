@@ -134,7 +134,7 @@ const turnHandler = (function() {
 
 // Below are UI components
 
-// Tracks player names
+// Tracks player names for display
 const playerNameTracker = (function() {
 
     const playerNames = {
@@ -142,11 +142,8 @@ const playerNameTracker = (function() {
         2: "Player X",
     };
 
-    console.log(playerNames);
-
     events.on("player_name_change", function({player, newName}) {
         playerNames[player] = newName;
-        console.log(playerNames);
     });
 
     function getPlayerName(player) {
@@ -207,6 +204,11 @@ const victoryModalHandler = (function() {
 
     events.on("player_won", function(player) {
         victoryModal.textContent = playerNameTracker.getPlayerName(player) + " Won!";
+        victoryModal.style = "visibility: visible";
+    });
+
+    events.on("stalemate", function(player) {
+        victoryModal.textContent = "Stalemate!";
         victoryModal.style = "visibility: visible";
     });
 
