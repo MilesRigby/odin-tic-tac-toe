@@ -12,7 +12,7 @@
 // board_state_update
 // player_turn_update
 
-// A simple event system copied from YouTube channel LearnCode.academy, video:
+// A simple event system found on YouTube channel LearnCode.academy, video:
 // "Modular Javascript #4 - PubSub Javascript Design Pattern", found through The Odin Project
 var events = {
     events: {},
@@ -242,7 +242,7 @@ const restartButtonManager = (function() {
 
 
 // Handles changing names of players through forms
-const nameFormHandler = (function() {
+const nameFormManager = (function() {
 
     const p1NameForm = document.querySelector("#p1-form");
     const p2NameForm = document.querySelector("#p2-form");

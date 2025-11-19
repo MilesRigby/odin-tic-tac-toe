@@ -1,4 +1,4 @@
-page {
+.page {
     position: relative;
 
     margin: none;
@@ -8,6 +8,14 @@ page {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.background {
+    margin: -1rem; /* needed to remove whitespace at top of page. *shrug* */
+    position: fixed;
+    z-index: -1;
+    width: 100vw;
+    height: 102vh;
 
     background-color: lightgray;
 }
