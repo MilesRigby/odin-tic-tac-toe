@@ -1,4 +1,6 @@
 page {
+    position: relative;
+
     margin: none;
     padding: none;
     height: 98.5vh;
@@ -69,4 +71,29 @@ page {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.victory-modal {
+    position: fixed;
+    object-position: center;
+    width: 35rem;
+    height: 10rem;
+
+    background: white;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    border-radius: 1rem;
+
+    box-shadow: 2px 2px 0px gray;
+
+    font-size: 5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    top: 35vh;
+
+    visibility: hidden;
 }

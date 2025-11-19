@@ -174,7 +174,19 @@ const turnDispHandler = (function() {
 
 
 
+// Handler for the modal that tells the players when someone wins
+const victoryModalHandler = (function() {
 
+    const victoryModal = document.querySelector(".victory-modal");
+
+    events.on("player_won", function(player) {
+        if      (player == 1) { victoryModal.textContent = "Player O Won!"; }
+        else if (player == 2) { victoryModal.textContent = "Player X Won!"; }
+
+        victoryModal.style = "visibility: visible";
+    });
+
+})();
 
 
 
